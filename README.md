@@ -22,6 +22,8 @@ In the terminal `/qr-ms`
 
 Application runs on : <http://127.0.0.1:8000/>
 
+Postman API Documentation : <https://documenter.getpostman.com/view/1937580/UVsQsPqz/>
+
 ## Starting your containers
     docker-compose up
 
