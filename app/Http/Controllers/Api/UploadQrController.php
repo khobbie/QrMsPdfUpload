@@ -1,38 +1,33 @@
 <?php
 
-namespace App\Http\Livewire\Admin;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Qrs;
 use Illuminate\Support\Facades\Storage;
-use Livewire\Component;
-use Livewire\WithFileUploads;
 use Zxing\QrReader;
 
-
-class UploadQrLivewire extends Component
+class UploadQrController extends Controller
 {
-
-    use WithFileUploads;
-
-    public $upload_file;
-
-    public function save()
+    public function upload(Request $request)
     {
-        $this->validate([
-            'upload_file' => 'required|mimes:jpeg,jpg,png,pdf,PNG', // 1MB Max
+        // return $request;
+
+        $validated = $request->validate([
+            'upload_file' => 'required|mimes:jpeg,jpg,png,pdf,PNG',
         ]);
 
-        // if ($upload_file->store('photos')) {
+        // if($validated){
 
-        //     session()->flash('success', "File uploaded successfully");
-        // } else {
-        //     session()->flash('error', "Failed to upload file");
         // }
 
-        return $this->readerQR($this->upload_file);
+        $upload_file = $request->upload_file;
+
+        return $this->readerQR($upload_file);
     }
 
-    public function readerQR($upload_file)
+    private function readerQR($upload_file)
     {
         $filename = time();
 
@@ -59,10 +54,13 @@ class UploadQrLivewire extends Component
 
                 $qrs->save();
 
-                $this->reset();
-                $this->upload_file = null;
-                session()->flash('success', "QR File uploaded successfully");
-                return;
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'QR file upload successfully',
+                    'data' => [
+                        'content' => $content
+                    ]
+                ], 200);
             } else if ($file_extension == ('pdf')) {
 
                 $file_filename = $filename . '.' . $file_extension;
@@ -89,24 +87,28 @@ class UploadQrLivewire extends Component
                 $qrs->content = $content;
                 $qrs->status = "Submitted";
 
-                $this->reset();
-                $this->upload_file = null;
-                session()->flash('success', "QR File uploaded successfully");
-                return;
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'QR file upload successfully',
+                    'data' => [
+                        'content' => $content
+                    ]
+                ], 200);
             } else {
-                session()->flash('success', "No Image");
-                return;
+
+                return response()->json([
+                    'status' => 'failure',
+                    'message' => 'File not a valid qr file',
+                    'data' => null
+                ], 200);
             }
         } catch (\Exception $e) {
-            //throw $th;
-            session()->flash('error', $e->getMessage());
-            return;
+            return response()->json([
+                'status' => 'failure',
+                'message' => $e->getMessage(),
+                'data' => null
+            ], 200);
         }
-    }
-
-
-    public function render()
-    {
-        return view('livewire.admin.upload-qr-livewire');
     }
 }

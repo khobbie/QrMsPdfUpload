@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Qrs;
 use Livewire\Component;
+use Illuminate\Support\Facades\Storage;
 
 class QrTableRowDisplayLivewire extends Component
 {
@@ -45,6 +46,27 @@ class QrTableRowDisplayLivewire extends Component
     {
         $qr = Qrs::find($uuid);
         $qr->delete();
+
+        /*
+        if ($qr->extension == ('png' || 'jpeg' || 'png')) {
+            $file_image_path = Storage::disk('local')->path("/public/qr/images/" . $qr->filename);
+            if (file_exists($file_image_path)) {
+                unlink($file_image_path); // so you never get here
+            }
+        } else {
+            $file_image_path = Storage::disk('local')->path("/public/qr/images/" . $qr->filename);
+            if (file_exists($file_image_path)) {
+                unlink($file_image_path); // so you never get here
+            }
+
+            $file_pdf_path = Storage::disk('local')->path("/public/qr/pdf/" . $qr->filename);
+            if (file_exists($file_pdf_path)) {
+                unlink($file_pdf_path); // so you never get here
+            }
+        }
+
+        */
+
         $this->hidden = 'none';
     }
 

@@ -59,6 +59,9 @@
 
 
             </div>
+
+            <a href="{{ url('home') }}" class="float-end">Dashboard</a>
+
         </form>
 
     </div>
