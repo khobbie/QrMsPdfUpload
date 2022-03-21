@@ -19,3 +19,7 @@ In the terminal `/qr-ms`
 Application runs on : <http://127.0.0.1:8000/>
 
 
+
+
+https://user-images.githubusercontent.com/22434053/159277407-d1df3afa-f26d-49f0-922e-6f4e4dbfce9e.mp4
+
